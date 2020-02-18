@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My UI</title>
+    <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="../src/myui.css" />
+    <style>
+        a.test { cursor: pointer; color: red; text-decoration: underline; }
+        input, .faux-input {
+            font-family: Arial, Helvetica, sans-serif;
+            border: 1px solid #888888;
+            padding: 2px;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Testing...</h1>
+    <table>
+        <tr>
+            <th>Name: </th>
+            <td><input type="text" class="auto-complete" id="autocomplete" /><input type="hidden" id="autocompleteId" /></td>
+        </tr>
+        <tr>
+            <th>Date: </th>
+            <td><input type="text" class="date" id="calendar" value="" /></td>
+        </tr>
+        <tr>
+            <th>Time: </th>
+            <td><input type="text" class="time" id="clock" value="" /></td>
+        </tr>
+    </table>
+    <br />
+    <span id="button-holder"></span>
+    <br />
+    <br />
+    <p id="test_place">Click here to do the thing: </p>
+    <br />
+    <p><a id="test_modal" class="test">Lorem ipsum dolor sit amet</a>, consectetur adipiscing elit. Nam eu tincidunt dui, hendrerit dignissim lorem. Proin rhoncus, nulla id vehicula vulputate, nulla tellus semper nulla, in volutpat odio augue non risus. Donec commodo dignissim finibus. Morbi id luctus metus, nec ornare est. Fusce condimentum leo at pellentesque vulputate. Sed vulputate dapibus euismod. Praesent pellentesque, orci ut facilisis ultricies, odio mi blandit sapien, eget commodo tortor justo in felis.</p>
+    <p><a id="test_error" class="test">Ut condimentum eros in mauris tincidunt</a>, tincidunt rutrum mi elementum. <a id="test_warning" class="test">Nam aliquet elit id erat congue pulvinar.</a> Curabitur convallis at sapien sed interdum. Morbi in dapibus enim, id ullamcorper ex. Nulla facilisi. Vestibulum suscipit dictum neque, in porttitor nisl auctor eget. Sed turpis neque, dignissim sit amet leo at, fringilla dictum metus. Maecenas vel neque enim. Pellentesque sit amet consequat mauris.</p>
+    <p><a id="test_success" class="test">Nam scelerisque dignissim ante ut gravida.</a> Duis vitae gravida eros. Curabitur vehicula pulvinar diam, in vestibulum tellus rhoncus sed. Fusce sit amet porta sem. Duis metus nibh, feugiat rhoncus finibus nec, tempor ac lacus. Praesent aliquet mauris eget ligula aliquet, non consequat nisi congue. Vestibulum elementum lorem nisi, eget consectetur orci bibendum ut. Aliquam nibh lacus, finibus et tincidunt ultricies, ornare a diam. Ut semper velit ut turpis pellentesque, ac facilisis lorem pulvinar. Integer ullamcorper nibh ligula, ut eleifend lorem porta et. Aliquam erat volutpat. Nunc vitae ante eu ante ultricies tristique. Vivamus quis venenatis est. Fusce id maximus lectus, et elementum ex. Duis ut vestibulum ante, quis hendrerit nisi.</p>
+    <p><a id="test_hello" class="test">Curabitur et fermentum nisi. Etiam tristique,</a> tortor at consectetur tempor, tellus augue ullamcorper mi, vitae aliquam tortor justo vel risus. Etiam ante diam, efficitur a dui ac, tristique aliquam quam. Praesent sed cursus lorem. Proin ipsum ligula, scelerisque id porta sed, dapibus sed turpis. Nulla quis aliquam lorem. Donec id varius sapien. Etiam et eleifend orci. Donec at nisi lorem. Pellentesque dictum felis nec maximus euismod. Donec aliquam ipsum sed justo malesuada, a sodales libero aliquet. In hac habitasse platea dictumst. In hac habitasse platea dictumst.</p>
+    <p>Aliquam erat volutpat. Quisque vitae arcu non magna vestibulum venenatis sit amet at orci. Mauris eget porta quam. Vivamus interdum diam ante, in tincidunt arcu scelerisque sed. Vivamus lorem magna, pulvinar eu vulputate quis, euismod eget justo. Proin et ipsum in mi vehicula sollicitudin. Aliquam enim magna, volutpat a ipsum pharetra, pharetra mollis ligula. Vestibulum placerat enim sem, non ultricies turpis feugiat eget. Nullam tincidunt erat eros, a commodo ante egestas ut. Vestibulum euismod lectus nisl, id ultrices tortor eleifend at. Pellentesque ornare porttitor ante, vel posuere ex tempus eu.</p>
+    <script src="../src/myui.js"></script>
+    <script src="./index.js"></script>
+</body>
+</html>
