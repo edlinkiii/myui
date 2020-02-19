@@ -28,29 +28,13 @@ let autocomplete = new Autocomplete({
     input: '#autocomplete',
     target: '#autocompleteId',
     choices: [
-        {
-            ID: '123',
-            DisplayName: 'Ed Link'
-        },
-        {
-            ID: '234',
-            DisplayName: 'Ed Jones'
-        },
-        {
-            ID: '345',
-            DisplayName: 'Tom Link'
-        },
-        {
-            ID: '456',
-            DisplayName: 'Tom Jones'
-        }
+        { ID: '123', DisplayName: 'Ed Link' },
+        { ID: '234', DisplayName: 'Ed Jones' },
+        { ID: '345', DisplayName: 'Tom Link' },
+        { ID: '456', DisplayName: 'Tom Jones' }
     ],
-    handleQueryData: function(data, query) {
-        return data.filter(d => d.DisplayName.includes(query)).map(d => ({ id: d.ID, display: d.DisplayName }));
-    },
-    handleSelectItem: function(item) {
-        alert(item.display);
-    }
+    handleQueryData: (data, query) => data.filter(d => d.DisplayName.includes(query)).map(d => ({ id: d.ID, display: d.DisplayName })),
+    handleSelectItem: (item) => alert(item.display)
 });
 
 let calendar = new Calendar({

@@ -40,10 +40,10 @@ An array that will be used to create the list of selectable options.
 ### autoCreate | bool, true
 If true (default), create is called upon instantiation of a new Autocomplete object.
 
-### handleSelectItem | function
+### handleSelectItem | function(selected)
 A function that will be run on whichever option is selected.
 
-### handleQueryData | function
+### handleQueryData | function(array)
 A function run on the data provided (via choices array or url) to put it in the proper format for use.
 
 ```javascript
@@ -57,3 +57,17 @@ A function run on the data provided (via choices array or url) to put it in the 
 ```
 
 ## Usage Example
+```javascript
+let autocomplete = new Autocomplete({
+    input: '#autocomplete',
+    target: '#autocompleteId',
+    choices: [
+        { ID: '123', DisplayName: 'Ed Link' },
+        { ID: '234', DisplayName: 'Ed Jones' },
+        { ID: '345', DisplayName: 'Tom Link' },
+        { ID: '456', DisplayName: 'Tom Jones' }
+    ],
+    handleQueryData: (data, query) => data.filter(d => d.DisplayName.includes(query)).map(d => ({ id: d.ID, display: d.DisplayName })),
+    handleSelectItem: (item) => alert(item.display)
+});
+```
