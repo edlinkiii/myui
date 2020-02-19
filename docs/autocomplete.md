@@ -43,7 +43,7 @@ If true (default), create is called upon instantiation of a new Autocomplete obj
 ### handleSelectItem | function(selected)
 A function that will be run on whichever option is selected.
 
-### handleQueryData | function(array)
+### handleQueryData | function(array, query)
 A function run on the data provided (via choices array or url) to put it in the proper format for use.
 
 ```javascript
