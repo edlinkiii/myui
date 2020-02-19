@@ -674,7 +674,9 @@ class Autocomplete extends MyUI {
 }
 
 class Multiselect extends MyUI {
-    config = {}
+    config = {
+        class: 'multiselect-ui'
+    }
     settings = {
         input: null,
         target: null,
@@ -698,25 +700,17 @@ class Multiselect extends MyUI {
             this.settings[s] = settings[s];
         }
         this.topZindex = (this.findTopZindex())+1;
+        this.inputEl = document.querySelector(this.settings.input);
         this.targetEl = this.defineTargetElement(this.settings.target);
         this.create();
     }
-
-    // const settings = { ...defaults.multiselect, ...options };
-    // const selector = this.selector;
-    // const elems = this.elems;
-
     create() {
-        this.settings = settings;
-        this.inputEl = elems[0];
-        this.targetEl = document.querySelector(this.settings.target);
-
-        // create panel (to display selectable items)
-        this.panel = MyUI(selector || this.settings.input).panel({
+        this.panel = new Panel({
+            target: this.settings.input,
             attachToElement: this.settings.input,
             width: this.settings.width,
             height: this.settings.height,
-            addClass: 'multiselect-ui'
+            addClass: this.config.class
         }).create();
         this.panelEl = this.panel.instance;
 
@@ -735,7 +729,12 @@ class Multiselect extends MyUI {
         }
 
         this.showSelected();
-        this.doQuery();
+        if(this.settings.url) {
+            this.doQuery();
+        }
+        else if(this.settings.choices) {
+            this.storedOutput = this.buildList(this.settings.handleData(this.settings.choices));
+        }
 
         this.inputEl.addEventListener('click', e => {
             this.toggleDisplay();

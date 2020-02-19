@@ -66,6 +66,85 @@ let clock = new Clock({
     height: 350
 });
 
+let reasons = {
+    "Categories":[
+        {
+            "DisplayName":"Category 1",
+            "ID":"cat_1",
+            "Reasons":[
+                {
+                    "DisplayName":"Reason 1",
+                    "ID":"cat_1_reas_1"
+                },{
+                    "DisplayName":"Reason 2",
+                    "ID":"cat_1_reas_2"
+                },{
+                    "DisplayName":"Reason 3",
+                    "ID":"cat_1_reas_3"
+                }
+            ]
+        },{
+            "DisplayName":"Category 2",
+            "ID":"cat_2",
+            "Reasons":[
+                {
+                    "DisplayName":"Reason 1",
+                    "ID":"cat_2_reas_1"
+                },{
+                    "DisplayName":"Reason 2",
+                    "ID":"cat_2_reas_2"
+                },{
+                    "DisplayName":"Reason 3",
+                    "ID":"cat_2_reas_3"
+                }
+            ]
+        },{
+            "DisplayName":"Category 3",
+            "ID":"cat_3",
+            "Reasons":[
+                {
+                    "DisplayName":"Reason 1",
+                    "ID":"cat_3_reas_1"
+                },{
+                    "DisplayName":"Reason 2",
+                    "ID":"cat_3_reas_2"
+                },{
+                    "DisplayName":"Reason 3",
+                    "ID":"cat_3_reas_3"
+                }
+            ]
+        }
+    ]
+};
+
+let multi = new Multiselect({
+    input: '#multi_input',
+    target: '#multi_id',
+    choices: reasons,
+    width: 168,
+    height: 200,
+    parentSelectable: false,
+    handleData: (data) => data.Categories.map(i => {
+        const obj = {
+            id: i.ID,
+            name: i.DisplayName
+        }
+        if(i.Reasons) {
+            obj.children = i.Reasons.map(j => {
+                return {
+                    id: j.ID,
+                    name: j.DisplayName,
+                    selectable: true
+                }
+            })
+        }
+        return obj;
+    }),
+    handleSelectedItems: (selectedItems) => {
+        // console.log(selectedItems);
+    }
+});
+
 const doModalTest = () => {
     return new Modal({
         title: 'test',
