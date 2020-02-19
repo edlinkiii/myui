@@ -499,6 +499,7 @@ class Autocomplete extends MyUI {
         height: null,
         url: null,
         choices: null,
+        autoCreate: true,
         handleSelectItem: function(e) { return e; },
         handleQueryData: function(data) { return data; }
     }
