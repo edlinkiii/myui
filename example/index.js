@@ -10,7 +10,7 @@ let blocker = new Blocker({
     open: function() {
         setTimeout(() => {
             blocker.destroy();
-        },2000);
+        },1000);
     }
 });
 
@@ -22,7 +22,7 @@ let button = new Button({
     onClick: function() {
         alert('This is a test!');
     }
-}).disable();
+}); // .disable();
 
 let autocomplete = new Autocomplete({
     input: '#autocomplete',
@@ -154,7 +154,7 @@ const doModalTest = () => {
         buttons: [
             {
                 classes: ['button-blue'],
-                text: 'Click Me',
+                text: 'Close',
                 onClick: () => modal.destroy()
             }
         ]
