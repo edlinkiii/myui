@@ -172,6 +172,11 @@ class Overlay extends MyUI {
         this.instance.style.backgroundColor = 'rgba('+ this.instance.style.backgroundColor.substring(4,(this.instance.style.backgroundColor.length-1)) +', '+ this.settings.opacity +')';
         this.instance.style.zIndex = this.topZindex;
 
+        if(this.settings.target !== 'body') {
+            this.instance.style.width = this.targetElement.offsetWidth + 'px';
+            this.instance.style.height = this.targetElement.offsetHeight + 'px';
+        }
+
         this.targetElement.appendChild(this.instance);
 
         if(this.settings.closeOnEsc) {
