@@ -500,3 +500,12 @@
     cursor: w-resize;
   }
   
+
+
+  .wrapper-table-ui {
+    border: 2px dashed red;
+    overflow: hidden;
+  }
+  .table-ui {
+    color: black;
+  }

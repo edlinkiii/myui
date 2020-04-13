@@ -436,6 +436,10 @@ class Modal extends MyUI {
         };
     }
 
+    fadeIn() {}
+
+    fadeOut () {}
+
     content(content) {
         this.modalContent.innerHTML = content;
 
@@ -1398,5 +1402,87 @@ class Shout extends MyUI {
     destroy() {
         this.instance.remove();
     }
+}
 
+class Table extends MyUI {
+  config = {
+      type: 'table',
+      class: 'table-ui',
+      display: 'table'
+  }
+  settings = {
+      data: [],
+      desc: [],
+      target: 'body',
+      id: 'my-table',
+      width: '750px',
+      height: '200px'
+  }
+  constructor(settings) {
+      super();
+      for(let s in settings) {
+          this.settings[s] = settings[s];
+      }
+      this.parent = document.querySelector(this.settings.target);
+      this.create();
+  }
+  create() {
+      this.wrapper = document.createElement('div');
+      this.wrapper.classList.add('wrapper-'+this.config.class);
+      this.wrapper.style.maxWidth = this.settings.width;
+      this.wrapper.style.maxHeight = this.settings.height;
+      this.wrapper.style.width = this.settings.width;
+      this.wrapper.style.height = this.settings.height;
+
+      this.instance = document.createElement(this.config.type);
+      this.instance.classList.add(this.config.class);
+      this.instance.style.width = this.settings.width;
+      this.instance.style.height = this.settings.height;
+
+      this.instance.appendChild(this.buildHead(this.settings.desc));
+
+      this.instance.appendChild(this.buildBody(this.settings.data, this.settings.desc));
+
+      this.wrapper.appendChild(this.instance);
+
+      this.parent.appendChild(this.wrapper);
+
+      return this;
+  }
+  destroy() {
+      this.instance.remove();
+  }
+  buildHead(desc) {
+    let head = document.createElement('thead');
+
+    desc.forEach((cell) => {
+      let th = document.createElement('th');
+      let text = document.createTextNode(cell.name);
+      th.appendChild(text);
+      th.classList.add('table-ui-header');
+      if(cell.sortable) {
+        th.classList.add('table-ui-sortable');
+      }
+      head.appendChild(th);
+    })
+
+    return head;
+  }
+  buildBody(data, desc) {
+    let body = document.createElement('tbody');
+
+    data.forEach((row) => {
+      let tr = document.createElement('tr');
+      row.forEach((col) => {
+        let td = document.createElement('td');
+        let text = document.createTextNode(col);
+        td.appendChild(text);
+        td.classList.add('table-ui-data');
+        tr.appendChild(td);
+      })
+      body.appendChild(tr);
+    })
+
+    return body;
+  }
 }

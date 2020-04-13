@@ -1,3 +1,72 @@
+const data = [
+  ['Mr', 'Tim', 'Taylor', '', 55, '1965-12-01', 'M', 'timt@test.com', 75_000],
+  ['Mrs', 'Sally', 'Shank', '', 35, '1985-06-22', 'F', 'sshank@test.com', 55_000],
+  ['Rev', 'Jim', 'Jones', 'Jr', 25, '1995-07-30', 'M', 'jjj@test.com', 33_500],
+  ['', 'Pat', 'Patronus', '', 20, '2000-02-02', 'NB', 'pat.attack@test.com', 85_000],
+  ['Ms', 'Marcia', 'Mandalorian', '', 40, '1980-05-04', 'F', 'mando@test.com', 12_000],
+  ['Mr', 'Daniel', 'Dinkworthy', 'III', 45, '1975-08-25', 'M', 'dan.dink@test.com', 0],
+  ['Miss', 'Tina', 'Thompson', '', 30, '1990-11-16', 'F', 'tinat@test.com', 100_000]
+]
+
+const desc = [
+  {
+    name: 'Prefix',
+    type: 'alpha',
+    sortable: false
+  },
+  {
+    name: 'First Name',
+    type: 'alpha',
+    sortable: true
+  },
+  {
+    name: 'Last Name',
+    type: 'alpha',
+    sortable: true,
+    defaultSort: true
+  },
+  {
+    name: 'Suffix',
+    type: 'alpha',
+    sortable: false
+  },
+  {
+    name: 'Age',
+    type: 'number',
+    sortable: true
+  },
+  {
+    name: 'Birthdate',
+    type: 'date',
+    format: 'mm/dd/yyyy',
+    sortable: true
+  },
+  {
+    name: 'Sex',
+    type: 'alpha',
+    sortable: true
+  },
+  {
+    name: 'Email',
+    type: 'alpha',
+    sortable: true
+  },
+  {
+    name: 'Income',
+    type: 'money',
+    format: '$X,XXX.XX',
+    sortable: true
+  }
+]
+
+let table = new Table({
+  data: data,
+  desc: desc,
+  width: '750px',
+  height: '100px',
+  target: '#put-it-here'
+});
+
 let blocker = new Blocker({
     message: 'Testing...',
     css: {
