@@ -1427,52 +1427,60 @@ class Table extends MyUI {
       this.create();
   }
   create() {
-      this.wrapper = document.createElement('div');
-      this.wrapper.classList.add('wrapper-'+this.config.class);
-      this.wrapper.style.maxWidth = this.settings.width;
-      this.wrapper.style.maxHeight = this.settings.height;
-      this.wrapper.style.width = this.settings.width;
-      this.wrapper.style.height = this.settings.height;
+    this.instance = document.createElement(this.config.type);
+    this.instance.classList.add(this.config.class);
+    this.instance.style.maxWidth = this.settings.width;
+    this.instance.style.maxHeight = this.settings.height;
+    this.instance.style.width = this.settings.width;
+    this.instance.style.height = this.settings.height;
 
-      this.instance = document.createElement(this.config.type);
-      this.instance.classList.add(this.config.class);
-      this.instance.style.width = this.settings.width;
-      this.instance.style.height = this.settings.height;
+    this.head = this.buildHead(this.settings.desc);
 
-      this.instance.appendChild(this.buildHead(this.settings.desc));
+    this.instance.appendChild(this.head);
 
-      this.instance.appendChild(this.buildBody(this.settings.data, this.settings.desc));
+    this.body = this.buildBody(this.settings.data, this.settings.desc);
 
-      this.wrapper.appendChild(this.instance);
+    this.instance.appendChild(this.body);
 
-      this.parent.appendChild(this.wrapper);
+    this.parent.appendChild(this.instance);
 
-      return this;
+    this.setHeadCellWidths();
+
+    return this;
   }
   destroy() {
       this.instance.remove();
   }
   buildHead(desc) {
     let head = document.createElement('thead');
+    let tr = document.createElement('tr');
 
     desc.forEach((cell) => {
       let th = document.createElement('th');
       let text = document.createTextNode(cell.name);
       th.appendChild(text);
-      th.classList.add('table-ui-header');
       if(cell.sortable) {
         th.classList.add('table-ui-sortable');
       }
-      head.appendChild(th);
-    })
+      tr.appendChild(th);
+    });
+
+    let th = document.createElement('th');
+    th.classList.add('table-ui-scroll-block');
+
+    tr.appendChild(th);
+
+    head.appendChild(tr);
 
     return head;
   }
   buildBody(data, desc) {
     let body = document.createElement('tbody');
+    let i=0;
 
     data.forEach((row) => {
       let tr = document.createElement('tr');
+      tr.classList.add(i % 2 == 0 ? 'table-ui-row-even' : 'table-ui-row-odd');
       row.forEach((col) => {
         let td = document.createElement('td');
         let text = document.createTextNode(col);
@@ -1481,8 +1489,22 @@ class Table extends MyUI {
         tr.appendChild(td);
       })
       body.appendChild(tr);
+      i++;
     })
 
     return body;
+  }
+  setHeadCellWidths() {
+    let b_rows = this.body.children;
+    let b_cells = b_rows[0].children;
+    let widths = [];
+    for(let i=0; i<b_cells.length; i++) {
+      widths.push(b_cells[i].offsetWidth);
+    }
+    let h_rows = this.head.children;
+    let h_cells = h_rows[0].children;
+    for(let i=0; i<widths.length; i++) {
+      h_cells[i].style.width = widths[i]+'px';
+    }
   }
 }

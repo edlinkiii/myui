@@ -502,10 +502,48 @@
   
 
 
-  .wrapper-table-ui {
-    border: 2px dashed red;
-    overflow: hidden;
-  }
-  .table-ui {
-    color: black;
-  }
+
+
+.table-ui {
+  width: 400px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.table-ui tbody {
+  display:block;
+  width: 100%;
+  overflow: auto;
+  height: 100px;
+}
+
+.table-ui thead tr {
+   display: block;
+}
+
+.table-ui thead {
+  background: black;
+  color:#fff;
+}
+
+.table-ui th, .table-ui td {
+  padding: 5px;
+  text-align: left;
+  width: 1000px;
+  box-sizing: border-box;
+}
+
+.table-ui th {
+  display: inline-block;
+}
+
+.table-ui-scroll-block {
+  width: 15px !important;
+}
+
+.table-ui-row-even {
+  background-color: #fff;
+}
+.table-ui-row-odd {
+  background-color: #ddd;
+}
