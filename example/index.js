@@ -23,7 +23,9 @@ const desc = [
     name: 'Last Name',
     type: 'alpha',
     sortable: true,
-    defaultSort: true
+    defaultSort: true,
+    defaultOrder: 'a' // ascending
+    // defaultOrder: 'd' // descending
   },
   {
     name: 'Suffix',

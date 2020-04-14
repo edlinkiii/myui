@@ -1455,15 +1455,17 @@ class Table extends MyUI {
     let head = document.createElement('thead');
     let tr = document.createElement('tr');
 
-    desc.forEach((cell) => {
+    for(let i=0; i<desc.length; i++) {
       let th = document.createElement('th');
-      let text = document.createTextNode(cell.name);
+      let text = document.createTextNode(desc[i].name);
+      th.setAttribute('data-index', i);
       th.appendChild(text);
-      if(cell.sortable) {
+      if(desc[i].sortable) {
         th.classList.add('table-ui-sortable');
+        th.addEventListener("click", e => this.sortClick(e.target));
       }
       tr.appendChild(th);
-    });
+    }
 
     let th = document.createElement('th');
     th.classList.add('table-ui-scroll-block');
@@ -1506,5 +1508,39 @@ class Table extends MyUI {
     for(let i=0; i<widths.length; i++) {
       h_cells[i].style.width = widths[i]+'px';
     }
+  }
+  findDefaultSortIndex(desc) {
+    for(let i=0; i<desc.length; i++) {
+      if(desc[i].defaultSort) {
+        this.sortIndex = i;
+        this.sortDirection = desc[i].defaultOrder || 'a';
+      }
+    }
+  }
+  sortClick(clicked) {
+    this.sortIndex = clicked.dataset.index;
+    this.sortDirection = clicked.dataset.direction;
+    this.setSortOrder(this.sortIndex, this.sortDirection);
+  }
+  setSortOrder(index=this.sortIndex, direction=this.sortDirection) {
+    let sortObjects = [];
+    let sortArray = this.settings.data.map(d => d[index]).forEach((d,i) => sortObjects.push({ data: d, index: i}));
+    if(direction === 'a') {
+      sortObjects.sort((a,b) => (a.data < b.data) ? 1 : -1);
+    }
+    else {
+      sortObjects.sort((a,b) => (a.data > b.data) ? 1 : -1);
+    }
+    console.log(sortObjects)
+    let order = [];
+    sortObjects.forEach((i) => {
+      order.push(i.index);
+    })
+    return this.sortOrder = order;
+  }
+  formatMoney(input) {
+    // do the formatting...
+    let output = input;
+    return output;
   }
 }

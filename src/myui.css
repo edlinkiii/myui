@@ -547,3 +547,7 @@
 .table-ui-row-odd {
   background-color: #ddd;
 }
+
+.table-ui-sortable {
+  cursor: pointer;
+}
