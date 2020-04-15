@@ -64,3 +64,9 @@ let table = new Table({
   target: '#put-it-here'
 });
 ```
+
+## To Do
+Build formatting methods for data based on the assigned data type.
+
+### formatMoney(int)
+Return a string with monetary format ``` $X,XXX.XX ```

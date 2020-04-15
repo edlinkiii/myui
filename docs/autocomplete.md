@@ -1,5 +1,5 @@
 # Autocomplete
-Add an interface to give options to complete entered text.
+Add an interface to give options to complete entered text. (IntelliSense)
 
 ## Methods
 ### .create()
