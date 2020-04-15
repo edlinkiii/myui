@@ -1434,24 +1434,30 @@ class Table extends MyUI {
     this.instance.style.width = this.settings.width;
     this.instance.style.height = this.settings.height;
 
-    this.head = this.buildHead(this.settings.desc);
-
-    this.instance.appendChild(this.head);
-
-    this.body = this.buildBody(this.settings.data, this.settings.desc);
-
-    this.instance.appendChild(this.body);
+    this.findDefaultSortIndex();
 
     this.parent.appendChild(this.instance);
 
+    this.render();
+
     this.setHeadCellWidths();
+
+    return this;
+  }
+  render() {
+    this.instance.innerHTML = '';
+
+    this.instance.appendChild(this.buildHead());
+
+    this.instance.appendChild(this.buildBody());
 
     return this;
   }
   destroy() {
       this.instance.remove();
   }
-  buildHead(desc) {
+  buildHead() {
+    let desc = this.settings.desc;
     let head = document.createElement('thead');
     let tr = document.createElement('tr');
 
@@ -1474,9 +1480,11 @@ class Table extends MyUI {
 
     head.appendChild(tr);
 
-    return head;
+    return this.head = head;
   }
-  buildBody(data, desc) {
+  buildBody() {
+    let data = this.settings.data;
+    let desc = this.settings.desc;
     let body = document.createElement('tbody');
     let i=0;
 
@@ -1494,7 +1502,7 @@ class Table extends MyUI {
       i++;
     })
 
-    return body;
+    return this.body = body;
   }
   setHeadCellWidths() {
     let b_rows = this.body.children;
@@ -1509,11 +1517,12 @@ class Table extends MyUI {
       h_cells[i].style.width = widths[i]+'px';
     }
   }
-  findDefaultSortIndex(desc) {
+  findDefaultSortIndex() {
     for(let i=0; i<desc.length; i++) {
       if(desc[i].defaultSort) {
         this.sortIndex = i;
         this.sortDirection = desc[i].defaultOrder || 'a';
+        return;
       }
     }
   }
