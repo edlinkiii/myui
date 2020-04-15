@@ -11,25 +11,25 @@ const data = [
 const desc = [
   {
     name: 'Prefix',
-    type: 'alpha',
+    type: 'string',
     sortable: false
   },
   {
-    name: 'First Name',
-    type: 'alpha',
+    name: 'First',
+    type: 'string',
     sortable: true
   },
   {
-    name: 'Last Name',
-    type: 'alpha',
+    name: 'Last',
+    type: 'string',
     sortable: true,
     defaultSort: true,
-    defaultOrder: 'a' // ascending
-    // defaultOrder: 'd' // descending
+    defaultOrderAsc: true // ascending
+    // defaultOrderAsc: false // descending
   },
   {
     name: 'Suffix',
-    type: 'alpha',
+    type: 'string',
     sortable: false
   },
   {
@@ -45,12 +45,12 @@ const desc = [
   },
   {
     name: 'Sex',
-    type: 'alpha',
+    type: 'string',
     sortable: true
   },
   {
     name: 'Email',
-    type: 'alpha',
+    type: 'email',
     sortable: true
   },
   {

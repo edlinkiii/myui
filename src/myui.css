@@ -535,6 +535,7 @@
 
 .table-ui th {
   display: inline-block;
+  height: 100%;
 }
 
 .table-ui-scroll-block {
@@ -550,4 +551,7 @@
 
 .table-ui-sortable {
   cursor: pointer;
+}
+.table-ui-sortable.table-ui-active {
+  background-color: #333;
 }

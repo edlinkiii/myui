@@ -1440,8 +1440,6 @@ class Table extends MyUI {
 
     this.render();
 
-    this.setHeadCellWidths();
-
     return this;
   }
   render() {
@@ -1450,6 +1448,8 @@ class Table extends MyUI {
     this.instance.appendChild(this.buildHead());
 
     this.instance.appendChild(this.buildBody());
+
+    this.setHeadCellWidths();
 
     return this;
   }
@@ -1465,9 +1465,15 @@ class Table extends MyUI {
       let th = document.createElement('th');
       let text = document.createTextNode(desc[i].name);
       th.setAttribute('data-index', i);
+      let active = (this.sortIndex == i);
+      let direction = (active && this.sortDirection == 'a') ? 'd' : 'a';
+      th.setAttribute('data-direction', direction);
       th.appendChild(text);
       if(desc[i].sortable) {
         th.classList.add('table-ui-sortable');
+        if(active) {
+          th.classList.add('table-ui-active');
+        }
         th.addEventListener("click", e => this.sortClick(e.target));
       }
       tr.appendChild(th);
@@ -1483,12 +1489,14 @@ class Table extends MyUI {
     return this.head = head;
   }
   buildBody() {
+    this.setSortOrder();
+
     let data = this.settings.data;
     let desc = this.settings.desc;
     let body = document.createElement('tbody');
-    let i=0;
 
-    data.forEach((row) => {
+    for(let i=0; i<this.sortOrder.length; i++) {
+      let row = data[this.sortOrder[i]];
       let tr = document.createElement('tr');
       tr.classList.add(i % 2 == 0 ? 'table-ui-row-even' : 'table-ui-row-odd');
       row.forEach((col) => {
@@ -1499,8 +1507,7 @@ class Table extends MyUI {
         tr.appendChild(td);
       })
       body.appendChild(tr);
-      i++;
-    })
+    }
 
     return this.body = body;
   }
@@ -1518,33 +1525,43 @@ class Table extends MyUI {
     }
   }
   findDefaultSortIndex() {
+    this.sortIndex = 0;
+    this.sortDirection = 'a';
+
     for(let i=0; i<desc.length; i++) {
       if(desc[i].defaultSort) {
         this.sortIndex = i;
-        this.sortDirection = desc[i].defaultOrder || 'a';
+        this.sortDirection = (desc[i].defaultOrderAsc) ? 'a' : 'd';
         return;
       }
     }
-  }
+
+    return;
+}
   sortClick(clicked) {
     this.sortIndex = clicked.dataset.index;
     this.sortDirection = clicked.dataset.direction;
-    this.setSortOrder(this.sortIndex, this.sortDirection);
+
+    this.render();
   }
-  setSortOrder(index=this.sortIndex, direction=this.sortDirection) {
+  setSortOrder() {
+    let index = this.sortIndex; console.log(index)
+    let direction = this.sortDirection; console.log(direction)
     let sortObjects = [];
     let sortArray = this.settings.data.map(d => d[index]).forEach((d,i) => sortObjects.push({ data: d, index: i}));
-    if(direction === 'a') {
+    if(direction === 'd') {
       sortObjects.sort((a,b) => (a.data < b.data) ? 1 : -1);
     }
     else {
       sortObjects.sort((a,b) => (a.data > b.data) ? 1 : -1);
     }
-    console.log(sortObjects)
+
     let order = [];
     sortObjects.forEach((i) => {
       order.push(i.index);
     })
+
+    console.log(order)
     return this.sortOrder = order;
   }
   formatMoney(input) {
