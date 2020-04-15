@@ -1,11 +1,6 @@
 # Table
 Build a sortable, scrollable table for a given dataset.
 
-## Methods
-### .create()
-Processes user settings, builds UI elements, adds event listeners.
-Called on instantiation if `autoCreate` is set to `true` (default).
-
 ## Options
 ### target | selector, null
 A selector for the element that will contain the table when rendered.
