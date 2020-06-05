@@ -305,7 +305,7 @@ class Modal extends MyUI {
       overlay: {
           classes: ['modal-overlay'],
           backgroundColor: '#000',
-          opacity: 0.4
+          opacity: 0.5
       },
       noButtons: false,
       buttons: [
@@ -345,10 +345,8 @@ class Modal extends MyUI {
       if(this.settings.noTitle && this.settings.noButtons) this.instance.classList.add("content-only");
       else if(this.settings.noTitle) this.instance.classList.add("no-title");
       else if(this.settings.noButtons) this.instance.classList.add("no-buttons");
-      this.instance.setAttribute('style', 'max-width: 100vw; max-height: 100vh; width: '+ this.settings.width +'px; height: '+ ((this.settings.height == parseInt(this.settings.height)) ? this.settings.height+'px' : this.settings.height));
+      this.instance.setAttribute('style', 'max-width: 100vw; max-height: 100vh; width: '+ ((this.settings.width == parseInt(this.settings.width)) ? this.settings.width+'px' : this.settings.width)+'; height: '+ ((this.settings.height == parseInt(this.settings.height)) ? this.settings.height+'px' : this.settings.height));
       this.instance.style.zIndex = this.topZindex;
-
-      // this.instance.innerHTML = this.settings.message;
 
       // modal titlebar
       if(!this.settings.noTitle) {
