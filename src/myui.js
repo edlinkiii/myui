@@ -1395,3 +1395,170 @@ class Shout extends MyUI {
   }
 
 }
+
+class Table extends MyUI {
+  constructor(settings) {
+      super();
+      config = {
+          type: 'table',
+          class: 'table-ui',
+          display: 'table'
+      }
+      settings = {
+          data: [],
+          desc: [],
+          target: 'body',
+          id: 'my-table',
+          width: '750px',
+          height: '200px'
+      }
+      for(let s in settings) {
+          this.settings[s] = settings[s];
+      }
+      this.parent = document.querySelector(this.settings.target);
+      this.create();
+  }
+  create() {
+    this.instance = document.createElement(this.config.type);
+    this.instance.classList.add(this.config.class);
+    this.instance.style.maxWidth = this.settings.width;
+    this.instance.style.maxHeight = this.settings.height;
+    this.instance.style.width = this.settings.width;
+    this.instance.style.height = this.settings.height;
+
+    this.findDefaultSortIndex();
+
+    this.parent.appendChild(this.instance);
+
+    this.render();
+
+    return this;
+  }
+  render() {
+    this.instance.innerHTML = '';
+
+    this.instance.appendChild(this.buildHead());
+
+    this.instance.appendChild(this.buildBody());
+
+    this.setHeadCellWidths();
+
+    return this;
+  }
+  destroy() {
+      this.instance.remove();
+  }
+  buildHead() {
+    let desc = this.settings.desc;
+    let head = document.createElement('thead');
+    let tr = document.createElement('tr');
+
+    for(let i=0; i<desc.length; i++) {
+      let th = document.createElement('th');
+      let text = document.createTextNode(desc[i].name);
+      th.setAttribute('data-index', i);
+      let active = (this.sortIndex == i);
+      let direction = (active && this.sortDirection == 'a') ? 'd' : 'a';
+      th.setAttribute('data-direction', direction);
+      th.appendChild(text);
+      if(desc[i].sortable) {
+        th.classList.add('table-ui-sortable');
+        if(active) {
+          th.classList.add('table-ui-active');
+        }
+        th.addEventListener("click", e => this.sortClick(e.target));
+      }
+      tr.appendChild(th);
+    }
+
+    let th = document.createElement('th');
+    th.classList.add('table-ui-scroll-block');
+
+    tr.appendChild(th);
+
+    head.appendChild(tr);
+
+    return this.head = head;
+  }
+  buildBody() {
+    this.setSortOrder();
+
+    let data = this.settings.data;
+    let desc = this.settings.desc;
+    let body = document.createElement('tbody');
+
+    for(let i=0; i<this.sortOrder.length; i++) {
+      let row = data[this.sortOrder[i]];
+      let tr = document.createElement('tr');
+      tr.classList.add(i % 2 == 0 ? 'table-ui-row-even' : 'table-ui-row-odd');
+      row.forEach((col) => {
+        let td = document.createElement('td');
+        let text = document.createTextNode(col);
+        td.appendChild(text);
+        td.classList.add('table-ui-data');
+        tr.appendChild(td);
+      })
+      body.appendChild(tr);
+    }
+
+    return this.body = body;
+  }
+  setHeadCellWidths() {
+    let b_rows = this.body.children;
+    let b_cells = b_rows[0].children;
+    let widths = [];
+    for(let i=0; i<b_cells.length; i++) {
+      widths.push(b_cells[i].offsetWidth);
+    }
+    let h_rows = this.head.children;
+    let h_cells = h_rows[0].children;
+    for(let i=0; i<widths.length; i++) {
+      h_cells[i].style.width = widths[i]+'px';
+    }
+  }
+  findDefaultSortIndex() {
+    this.sortIndex = 0;
+    this.sortDirection = 'a';
+
+    for(let i=0; i<desc.length; i++) {
+      if(desc[i].defaultSort) {
+        this.sortIndex = i;
+        this.sortDirection = (desc[i].defaultOrderAsc) ? 'a' : 'd';
+        return;
+      }
+    }
+
+    return;
+}
+  sortClick(clicked) {
+    this.sortIndex = clicked.dataset.index;
+    this.sortDirection = clicked.dataset.direction;
+
+    this.render();
+  }
+  setSortOrder() {
+    let index = this.sortIndex; console.log(index)
+    let direction = this.sortDirection; console.log(direction)
+    let sortObjects = [];
+    let sortArray = this.settings.data.map(d => d[index]).forEach((d,i) => sortObjects.push({ data: d, index: i}));
+    if(direction === 'd') {
+      sortObjects.sort((a,b) => (a.data < b.data) ? 1 : -1);
+    }
+    else {
+      sortObjects.sort((a,b) => (a.data > b.data) ? 1 : -1);
+    }
+
+    let order = [];
+    sortObjects.forEach((i) => {
+      order.push(i.index);
+    })
+
+    console.log(order)
+    return this.sortOrder = order;
+  }
+  formatMoney(input) {
+    // do the formatting...
+    let output = input;
+    return output;
+  }
+}
