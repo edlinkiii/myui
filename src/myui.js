@@ -1,19 +1,18 @@
 ﻿class MyUI {
-  instance = null;
-  targetElement = null;
-  config = {
-      type: 'div',
-      class: 'my-ui',
-      display: 'block'
-  }
-  settings = {
-      id: null,
-      classes: [],
-      target: 'body',
-      open: function() {},
-      close: function() {}
-  }
   constructor() {
+      this.instance = null;
+      this.config = {
+          type: 'div',
+          class: 'my-ui',
+          display: 'block'
+      }
+      this.settings = {
+          id: null,
+          classes: [],
+          target: 'body',
+          open: function() {},
+          close: function() {}
+      }
       this.targetElement = this.defineTargetElement(this.settings.target);
   }
   create() {
@@ -80,20 +79,20 @@
 }
 
 class Button extends MyUI {
-  config = {
-      type: 'button',
-      class: 'button-ui',
-      display: 'inline-block'
-  }
-  settings = {
-      id: null,
-      text: 'Button',
-      target: 'body',
-      classes: [],
-      onClick: function() {}
-  }
   constructor(settings) {
       super();
+      this.config = {
+          type: 'button',
+          class: 'button-ui',
+          display: 'inline-block'
+      }
+      this.settings = {
+          id: null,
+          text: 'Button',
+          target: 'body',
+          classes: [],
+          onClick: function() {}
+      }
       for(let s in settings) {
           this.settings[s] = settings[s];
       }
@@ -139,20 +138,19 @@ class Button extends MyUI {
 }
 
 class Overlay extends MyUI {
-  settings = {
-      id: null,
-      classes: [],
-      backgroundColor: '#000',
-      opacity: .5,
-      closeOnClick: false,
-      closeOnEsc: false,
-      target: 'body',
-      open: function() {},
-      close: function() {}
-  }
-
   constructor(settings) {
       super();
+      this.settings = {
+          id: null,
+          classes: [],
+          backgroundColor: '#000',
+          opacity: .5,
+          closeOnClick: false,
+          closeOnEsc: false,
+          target: 'body',
+          open: function() {},
+          close: function() {}
+      }
       for(let s in settings) {
           this.settings[s] = settings[s];
       }
@@ -211,27 +209,26 @@ class Overlay extends MyUI {
 }
 
 class Blocker extends MyUI {
-  settings = {
-      target: 'body',
-      message: '',
-      classes: [],
-      css: {
-          backgroundColor: 'transparent',
-          color: 'black',
-          border: 'transparent'
-      },
-      overlay: {
-          target: 'body',
-          classes: ['blocker-overlay'],
-          backgroundColor: '#fff',
-          opacity: 0.4
-      },
-      open: function() {},
-      close: function() {}
-  }
-
   constructor(settings) {
       super();
+      this.settings = {
+          target: 'body',
+          message: '',
+          classes: [],
+          css: {
+              backgroundColor: 'transparent',
+              color: 'black',
+              border: 'transparent'
+          },
+          overlay: {
+              target: 'body',
+              classes: ['blocker-overlay'],
+              backgroundColor: '#fff',
+              opacity: 0.4
+          },
+          open: function() {},
+          close: function() {}
+      }
       for(let s in settings) {
           this.settings[s] = settings[s];
       }
@@ -282,48 +279,46 @@ class Blocker extends MyUI {
 }
 
 class Modal extends MyUI {
-  config = {
-      type: 'div',
-      class: 'modal-ui',
-      display: 'block'
-  }
-
-  settings = {
-      id: null,
-      target: 'body',
-      autoCreate: true,
-      title: '',
-      noTitle: false,
-      draggable: false,
-      content: '',
-      classes: [],
-      width: 300,
-      height: 'auto',
-      darkMode: false,
-      closeOnEsc: false,
-      closeOnOverlayClick: false,
-      overlay: {
-          classes: ['modal-overlay'],
-          backgroundColor: '#000',
-          opacity: 0.5
-      },
-      noButtons: false,
-      buttons: [
-          {
-              id: '',
-              text: 'Close',
-              classes: ['button-red','button-close'],
-              onClick: function() {
-                  // this.close() // --- ???
-              }
-          }
-      ],
-      open: function() {},
-      close: function() {}
-  }
-
   constructor(settings) {
       super();
+      this.config = {
+          type: 'div',
+          class: 'modal-ui',
+          display: 'block'
+      }
+      this.settings = {
+          id: null,
+          target: 'body',
+          autoCreate: true,
+          title: '',
+          noTitle: false,
+          draggable: false,
+          content: '',
+          classes: [],
+          width: 300,
+          height: 'auto',
+          darkMode: false,
+          closeOnEsc: false,
+          closeOnOverlayClick: false,
+          overlay: {
+              classes: ['modal-overlay'],
+              backgroundColor: '#000',
+              opacity: 0.5
+          },
+          noButtons: false,
+          buttons: [
+              {
+                  id: '',
+                  text: 'Close',
+                  classes: ['button-red','button-close'],
+                  onClick: function() {
+                      // this.close() // --- ???
+                  }
+              }
+          ],
+          open: function() {},
+          close: function() {}
+      }
       for(let s in settings) {
           this.settings[s] = settings[s];
       }
@@ -446,17 +441,17 @@ class Modal extends MyUI {
 }
 
 class Panel extends MyUI {
-  config = {
-      type: 'div',
-      class: 'panel-ui',
-      display: 'block'
-  }
-  settings = {
-      attachToElement: null,
-      autoCreate: true
-  }
   constructor(settings) {
       super();
+      this.config = {
+          type: 'div',
+          class: 'panel-ui',
+          display: 'block'
+      }
+      this.settings = {
+          attachToElement: null,
+          autoCreate: true
+      }
       for(let s in settings) {
           this.settings[s] = settings[s];
       }
@@ -494,25 +489,25 @@ class Panel extends MyUI {
 }
 
 class Autocomplete extends MyUI {
-  config = {
-      class: 'autocomplete-panel-ui'
-  }
-  settings = {
-      minimum: 2,
-      matchRequired: true,
-      input: null,
-      target: null,
-      width: null,
-      height: null,
-      url: null,
-      choices: null,
-      autoCreate: true,
-      searchPlaceholder: '__QUERY__',
-      handleSelectItem: function(e) { return e; },
-      handleQueryData: function(data) { return data; }
-  }
   constructor(settings) {
       super();
+      this.config = {
+          class: 'autocomplete-panel-ui'
+      }
+      this.settings = {
+          minimum: 2,
+          matchRequired: true,
+          input: null,
+          target: null,
+          width: null,
+          height: null,
+          url: null,
+          choices: null,
+          autoCreate: true,
+          searchPlaceholder: '__QUERY__',
+          handleSelectItem: function(e) { return e; },
+          handleQueryData: function(data) { return data; }
+      }
       for(let s in settings) {
           this.settings[s] = settings[s];
       }
@@ -683,28 +678,27 @@ class Autocomplete extends MyUI {
 }
 
 class Multiselect extends MyUI {
-  config = {
-      class: 'multiselect-ui'
-  }
-  settings = {
-      input: null,
-      target: null,
-      width: null,
-      height: null,
-      url: '',
-      parentSelectable: false,
-      disabled: false,
-      autoCreate: true,
-      open: function() {},
-      close: function() {},
-      handleSelectedItems: function(selectedItemsArray) {},
-      handleData: function(data) { return data; }
-  }
-  ArrowDown = '<i class="myui my-arrow-down"></i>';
-  ArrowUp = '<i class="myui my-arrow-up"></i>';
-
   constructor(settings) {
       super();
+      this.config = {
+          class: 'multiselect-ui'
+      }
+      this.settings = {
+          input: null,
+          target: null,
+          width: null,
+          height: null,
+          url: '',
+          parentSelectable: false,
+          disabled: false,
+          autoCreate: true,
+          open: function() {},
+          close: function() {},
+          handleSelectedItems: function(selectedItemsArray) {},
+          handleData: function(data) { return data; }
+      }
+      this.ArrowDown = '<i class="myui my-arrow-down"></i>';
+      this.ArrowUp = '<i class="myui my-arrow-up"></i>';
       for(let s in settings) {
           this.settings[s] = settings[s];
       }
@@ -859,27 +853,26 @@ class Multiselect extends MyUI {
 }
 
 class Calendar extends MyUI {
-  config = {
-      type: 'div',
-      class: 'panel-ui',
-      display: 'block'
-  }
-  settings = {
-      input: null,
-      target: null,
-      width: null,
-      height: null,
-      noFuture: true,
-      selectedDate: null,
-      dateFormat: 'mm/dd/yyyy',
-      autoCreate: true,
-      handleSelectDate: function(dateObj) {}
-  }
-  months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  listening = false;
-
   constructor(settings) {
       super();
+      this.config = {
+          type: 'div',
+          class: 'panel-ui',
+          display: 'block'
+      }
+      this.settings = {
+          input: null,
+          target: null,
+          width: null,
+          height: null,
+          noFuture: true,
+          selectedDate: null,
+          dateFormat: 'mm/dd/yyyy',
+          autoCreate: true,
+          handleSelectDate: function(dateObj) {}
+      }
+      this.months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      this.listening = false;
       for(let s in settings) {
           this.settings[s] = settings[s];
       }
@@ -1112,26 +1105,25 @@ class Calendar extends MyUI {
 }
 
 class Clock extends MyUI {
-  config = {
-      type: 'div',
-      class: 'panel-ui',
-      display: 'block'
-  }
-  settings = {
-      input: null,
-      target: null,
-      width: null,
-      height: null,
-      selectedTime: null,
-      timeFormat: 'hh:MM AP',
-      twentyFourHour: false,
-      autoCreate: true,
-      handleSelectTime: function(timeObj) {}
-  }
-  emptyInput = false;
-
   constructor(settings) {
       super();
+      this.config = {
+          type: 'div',
+          class: 'panel-ui',
+          display: 'block'
+      }
+      this.settings = {
+          input: null,
+          target: null,
+          width: null,
+          height: null,
+          selectedTime: null,
+          timeFormat: 'hh:MM AP',
+          twentyFourHour: false,
+          autoCreate: true,
+          handleSelectTime: function(timeObj) {}
+      }
+      this.emptyInput = false;
       for(let s in settings) {
           this.settings[s] = settings[s];
       }
@@ -1334,24 +1326,24 @@ class Clock extends MyUI {
 }
 
 class Shout extends MyUI {
-  config = {
-      type: 'div',
-      class: 'shout-ui',
-      display: 'block'
-  }
-  settings = {
-      text: 'Alert!',
-      backgroundColor: '#2a67a8',
-      fontColor: '#ffffff',
-      duration: 3, // seconds --- duration * 1000
-      closeOnClick: true,
-      width: '50%',
-      height: '50px',
-      allBold: false,
-      allCaps: false
-  }
   constructor(settings) {
       super();
+      this.config = {
+          type: 'div',
+          class: 'shout-ui',
+          display: 'block'
+      }
+      this.settings = {
+          text: 'Alert!',
+          backgroundColor: '#2a67a8',
+          fontColor: '#ffffff',
+          duration: 3, // seconds --- duration * 1000
+          closeOnClick: true,
+          width: '50%',
+          height: '50px',
+          allBold: false,
+          allCaps: false
+      }
       for(let s in settings) {
           this.settings[s] = settings[s];
       }
