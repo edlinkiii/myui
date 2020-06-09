@@ -1399,12 +1399,12 @@ class Shout extends MyUI {
 class Table extends MyUI {
   constructor(settings) {
       super();
-      config = {
+      this.config = {
           type: 'table',
           class: 'table-ui',
           display: 'table'
       }
-      settings = {
+      this.settings = {
           data: [],
           desc: [],
           target: 'body',
