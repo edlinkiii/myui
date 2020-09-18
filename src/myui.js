@@ -41,7 +41,7 @@
       return this;
   }
   setting(setting) {
-      this.settings = { ...this.settings, setting };
+    this.settings = _objectSpread(_objectSpread({}, this.settings), {}, { setting });
 
       for(let i in setting) {
           this.instance.style[i] = setting[i];
