@@ -271,8 +271,14 @@ button.button-ui.delete-button:hover {
   background: #fff;
 }
 
-
-
+button.button-ui.button-small {
+  font-size: 12px;
+  line-height: 12px;
+  padding: 3px 5px;
+  margin: 2px;
+  height: auto;
+  font-weight: normal;
+}
 
 
 

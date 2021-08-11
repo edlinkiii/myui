@@ -850,7 +850,7 @@
     buildList(handledData) {
         const actuallySelected = [];
         let html = '';
-        html += '<button id="ui-btn-selectAll">Select All</button> <button id="ui-btn-deselectAll">Deselect All</button>';
+        html += '<button id="ui-btn-selectAll" class="button-ui button-small">Select All</button> <button id="ui-btn-deselectAll" class="button-ui button-small">Deselect All</button>';
         html += '<div class="selectable">';
         html += '<ul>';
         handledData.forEach(i => {
