@@ -692,6 +692,8 @@
             parentSelectable: false,
             parentSelectAll: false,
             selectAll: false,
+            collapsable: false,
+            displayOneSelected: false,
             disabled: false,
             autoCreate: true,
             open: function() {},
@@ -777,20 +779,41 @@
         }
     }
     showSelected() {
-        this.currentlySelected = (this.targetEl.value) ? this.targetEl.value.split(',') : []; // console.log(this.currentlySelected);
-        this.inputEl.value = this.currentlySelected.length + ' Selected';
+        this.currentlySelected = (this.targetEl.value) ? this.targetEl.value.split(',') : []; console.log(this.currentlySelected);
+
+        let firstSelected = (this.currentlySelected.length) ? this.panelEl.querySelector(`#${this.currentlySelected[0]}`) : null;
+        let selectedLabel = (firstSelected) ? firstSelected.parentElement.innerText : null;
+
+        this.inputEl.value = 
+            (this.currentlySelected.length === 1 && this.settings.displayOneSelected && selectedLabel)
+                ? selectedLabel
+                : this.currentlySelected.length + ' Selected';
     }
     addItemListeners() {
         document.querySelectorAll('.multiselect-ui li input').forEach(input => {
             input.addEventListener('change', e => this.listenerFunction__changeInput(e.target));
         });
   
-        document.querySelectorAll('.multiselect-ui li input.ui-selectChildren').forEach(input => {
+        document.querySelectorAll('.multiselect-ui li input.ui-select-children').forEach(input => {
             input.addEventListener('change', e => this.listenerFunction__changeParentInput(e.target));
         });
-  
+
+        document.querySelectorAll('.multiselect-ui li .ui-collapse-children').forEach(input => {
+            input.addEventListener('click', e => {
+                if(this.settings.collapsable) {
+                    e.preventDefault();
+                    this.listenerFunction__toggleChildVisibility(e.target);
+                }
+            });
+        });
+
         document.querySelector('#ui-btn-selectAll').addEventListener('click', e => this.listenerFunction__selectAll(e.target));
         document.querySelector('#ui-btn-deselectAll').addEventListener('click', e => this.listenerFunction__deselectAll(e.target));
+    }
+    listenerFunction__toggleChildVisibility(el) {
+        el.parentElement.parentElement.querySelectorAll('li').forEach((li) => {
+            li.style.display = (li.style.display === 'none') ? '' : 'none';
+        });
     }
     listenerFunction__selectAll(el) {
       let parent = el.parentElement;
@@ -812,19 +835,16 @@
   }
   listenerFunction__changeInput(el) {
       let label = el.parentElement;
-      if(el.classList.contains('ui-selectChildren')) {
+      if(el.classList.contains('ui-select-children')) {
           return;
       }
+      this.currentlySelected = this.currentlySelected.filter(j => j !== el.id);
       if(el.checked) {
-          el.parentElement.classList.add('selected');
           this.currentlySelected.push(el.id);
-      }
-      else {
-          el.parentElement.classList.remove('selected');
-          this.currentlySelected = this.currentlySelected.filter(j => j !== el.id);
       }
       this.targetEl.value = this.currentlySelected.join(',');
       this.showSelected();
+      this.evalParent(el);
     }
     listenerFunction__changeParentInput(el) {
       let state = el.checked;
@@ -834,6 +854,30 @@
         i.checked = state;
         this.listenerFunction__changeInput(i);
       });
+    }
+    evalParent(el) {
+        let parentUl = el.parentElement.parentElement.parentElement;
+        let parentCheckbox = parentUl.parentElement.querySelector('.ui-select-children');
+        let parentCheckboxDisplay = parentCheckbox.parentElement.querySelector('.checkbox-ui-checkmark');
+        console.log(parentUl);
+        let numCheckboxes=0;
+        let numChecked=0;
+        parentUl.querySelectorAll('li input').forEach((input) => {
+            numCheckboxes++;
+            if(input.checked) numChecked++;
+        });
+        if(numChecked === 0) {
+            parentCheckbox.checked = false;
+            parentCheckboxDisplay.style.backgroundColor = "#fff";
+        }
+        else if(numChecked === numCheckboxes) {
+            parentCheckbox.checked = true;
+            parentCheckboxDisplay.style.backgroundColor = "#2196F3";
+        }
+        else  {
+            parentCheckbox.checked = false;
+            parentCheckboxDisplay.style.backgroundColor = "#ccc";
+        }
     }
     doQuery(newUrl) {
         if(newUrl) this.settings.url = newUrl;
@@ -854,13 +898,12 @@
         html += '<div class="selectable">';
         html += '<ul>';
         handledData.forEach(i => {
-            let checked = (this.currentlySelected.includes(i.id)) ? 'checked' : '';
-            let selected = (this.currentlySelected.includes(i.id)) ? 'selected' : '';
+            let checked = '';//(this.currentlySelected.includes(i.id)) ? 'checked' : '';
             if(this.currentlySelected.includes(i.id)) actuallySelected.push(i.id);
             if(i.children) {
                 html += '<li class="parent">';
                 if(this.settings.parentSelectable) {
-                    html += '<label class="'+ selected +'"><input class="'+ (this.settings.parentSelectAll ? "ui-selectChildren" : "") +'" type="checkbox" id="'+ i.id +'" '+ checked +' />'+ i.name +'</label>';
+                    html += '<label class="checkbox-ui-container"><input class="'+ (this.settings.parentSelectAll ? "ui-select-children" : "") +'" type="checkbox" id="'+ i.id +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span><span class="ui-collapse-children">'+ i.name +'</span></label>';
                 }
                 else {
                     html += i.name;
@@ -868,23 +911,22 @@
                 html += '<ul>';
                 i.children.forEach(j => {
                     let checked = (this.currentlySelected.includes(j.id)) ? 'checked' : '';
-                    let selected = (this.currentlySelected.includes(j.id)) ? 'selected' : '';
                     if(this.currentlySelected.includes(j.id)) actuallySelected.push(j.id);
-                    html += '<li><label class="'+ selected +'"><input type="checkbox" id="'+ j.id +'" '+ checked +' />'+ j.name +'</label></li>';
+                    html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ j.id +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ j.name +'</label></li>';
                 });
                 html += '</ul>';
                 html += '</li>';
             }
             else {
-                html += '<li><label class="'+ selected +'"><input type="checkbox" id="'+ i.id +'" '+ checked +' />'+ i.name +'</label></li>';
+                html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ i.id +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ i.name +'</label></li>';
             }
         });
         html += '</ul>';
         html += '</div>';
   
         this.targetEl.value = actuallySelected.join(',');
-        this.showSelected();
         this.panelEl.innerHTML = html;
+        this.showSelected();
         this.addItemListeners();
     }
     updateURL(url) {

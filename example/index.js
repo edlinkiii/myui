@@ -178,7 +178,9 @@ const data = [
       choices: reasons,
       parentSelectable: true,
       parentSelectAll: true,
-      width: 168,
+      collapsable: true,
+      displayOneSelected: true,
+    //   width: 168,
       height: 200,
       handleData: (data) => data.Categories.map(i => {
           const obj = {
