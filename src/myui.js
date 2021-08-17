@@ -779,7 +779,7 @@
         }
     }
     showSelected() {
-        this.currentlySelected = (this.targetEl.value) ? this.targetEl.value.split(',') : []; console.log(this.currentlySelected);
+        this.currentlySelected = (this.targetEl.value) ? this.targetEl.value.split(',') : [];
 
         let firstSelected = (this.currentlySelected.length) ? this.panelEl.querySelector(`#${this.currentlySelected[0]}`) : null;
         let selectedLabel = (firstSelected) ? firstSelected.parentElement.innerText : null;
@@ -855,6 +855,13 @@
         this.listenerFunction__changeInput(i);
       });
     }
+    evalChecked() {
+        this.currentlySelected = (this.targetEl.value) ? this.targetEl.value.split(',') : [];
+
+        this.currentlySelected.forEach((id) => {
+            this.evalParent(this.panelEl.querySelector(`#${id}`));
+        });
+    }
     evalParent(el) {
         let parentUl = el.parentElement.parentElement.parentElement;
         let parentCheckbox = parentUl.parentElement.querySelector('.ui-select-children');
@@ -927,6 +934,7 @@
         this.targetEl.value = actuallySelected.join(',');
         this.panelEl.innerHTML = html;
         this.showSelected();
+        this.evalChecked();
         this.addItemListeners();
     }
     updateURL(url) {
