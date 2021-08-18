@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My UI</title>
+    <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="../../src/myui.css" />
+    <style>
+        a.test { cursor: pointer; color: red; text-decoration: underline; }
+        input, .faux-input {
+            font-family: Arial, Helvetica, sans-serif;
+            border: 1px solid #888888;
+            padding: 2px;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Testing...</h1>
+    <table>
+        <tr>
+            <th>Reasons: </th>
+            <td>
+                <input style="width: 500px;" type="text" class="multiselect-ui-display" id="multi_input" readonly />
+                <input type='hidden' id="multi_id" value="cat_1_reas_1" />
+            </td>
+        </tr>
+    </table>
+    <script src="../../src/myui.js"></script>
+    <script src="./index.js"></script>
+</body>
+</html>
