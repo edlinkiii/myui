@@ -99,6 +99,8 @@ let multi = new Multiselect({
     input: '#multi_input',
     target: '#multi_id',
     choices: reasons,
+    // choiceDisplayProperty: 'DisplayName',
+    // choiceIdProperty: 'ID',
     parentSelectable: true,
     parentSelectAll: true,
     selectAll: true,
@@ -116,8 +118,7 @@ let multi = new Multiselect({
             obj.children = i.Reasons.map(j => {
                 return {
                     id: j.ID,
-                    name: j.DisplayName,
-                    selectable: true
+                    name: j.DisplayName
                 }
             })
         }

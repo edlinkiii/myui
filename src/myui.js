@@ -690,6 +690,8 @@
             height: null,
             thinScrollbar: false,
             url: '',
+            choiceDisplayProperty: 'name',
+            choiceIdProperty: 'id',
             parentSelectable: false,
             parentSelectAll: false,
             selectAll: false,
@@ -933,6 +935,8 @@
     }
     buildList(handledData) {
         const actuallySelected = [];
+        let nameAlias = this.settings.choiceDisplayProperty;
+        let idAlias = this.settings.choiceIdProperty;
         let html = '';
         html += (this.settings.selectAll) ? '<div><button id="ui-btn-selectAll" class="button-ui button-small">Select All</button> <button id="ui-btn-deselectAll" class="button-ui button-small">Deselect All</button></div>' : '';
         html += (this.settings.collapseAll) ? '<div><button id="ui-btn-collapseAll" class="button-ui button-small">Collapse All</button> <button id="ui-btn-expandAll" class="button-ui button-small">Expand All</button></div>' : '';
@@ -944,22 +948,22 @@
             if(i.children) {
                 html += '<li class="parent">';
                 if(this.settings.parentSelectable) {
-                    html += `<label class="checkbox-ui-container">${(this.settings.parentSelectable ? `<input class="${(this.settings.parentSelectAll ? "ui-select-children" : "")}" type="checkbox" id="${i.id}" ${checked} />` : '')}<span class="checkbox-ui-checkmark"></span><span class="ui-collapse-children">${i.name}</span></label>`;
+                    html += `<label class="checkbox-ui-container"><input class="${(this.settings.parentSelectAll ? "ui-select-children" : "")}" type="checkbox" id="${i[idAlias]}" ${checked} /><span class="checkbox-ui-checkmark"></span><span class="ui-collapse-children">${i[nameAlias]}</span></label>`;
                 }
                 else {
-                    html += i.name;
+                    html += i[nameAlias];
                 }
                 html += '<ul>';
                 i.children.forEach(j => {
                     let checked = (this.currentlySelected.includes(j.id)) ? 'checked' : '';
                     if(this.currentlySelected.includes(j.id)) actuallySelected.push(j.id);
-                    html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ j.id +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ j.name +'</label></li>';
+                    html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ j[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ j[nameAlias] +'</label></li>';
                 });
                 html += '</ul>';
                 html += '</li>';
             }
             else {
-                html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ i.id +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ i.name +'</label></li>';
+                html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ i[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ i[nameAlias] +'</label></li>';
             }
         });
         html += '</ul>';
