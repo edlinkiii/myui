@@ -45,6 +45,52 @@ let reasons = {
                     "ID":"cat_3_reas_3"
                 }
             ]
+        },
+        {
+            "DisplayName":"Category 4",
+            "ID":"cat_4",
+            "Reasons":[
+                {
+                    "DisplayName":"Reason 1",
+                    "ID":"cat_4_reas_1"
+                },{
+                    "DisplayName":"Reason 2",
+                    "ID":"cat_4_reas_2"
+                },{
+                    "DisplayName":"Reason 3",
+                    "ID":"cat_4_reas_3"
+                }
+            ]
+        },{
+            "DisplayName":"Category 5",
+            "ID":"cat_5",
+            "Reasons":[
+                {
+                    "DisplayName":"Reason 1",
+                    "ID":"cat_5_reas_1"
+                },{
+                    "DisplayName":"Reason 2",
+                    "ID":"cat_5_reas_2"
+                },{
+                    "DisplayName":"Reason 3",
+                    "ID":"cat_5_reas_3"
+                }
+            ]
+        },{
+            "DisplayName":"Category 6",
+            "ID":"cat_6",
+            "Reasons":[
+                {
+                    "DisplayName":"Reason 1",
+                    "ID":"cat_6_reas_1"
+                },{
+                    "DisplayName":"Reason 2",
+                    "ID":"cat_6_reas_2"
+                },{
+                    "DisplayName":"Reason 3",
+                    "ID":"cat_6_reas_3"
+                }
+            ]
         }
     ]
 };
@@ -55,7 +101,9 @@ let multi = new Multiselect({
     choices: reasons,
     parentSelectable: true,
     parentSelectAll: true,
+    selectAll: true,
     collapsable: true,
+    collapseAll: true,
     displayOneSelected: true,
 //   width: 168,
     height: 300,
