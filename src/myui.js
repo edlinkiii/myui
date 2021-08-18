@@ -688,6 +688,7 @@
             target: null,
             width: null,
             height: null,
+            thinScrollbar: false,
             url: '',
             parentSelectable: false,
             parentSelectAll: false,
@@ -719,6 +720,11 @@
             height: this.settings.height,
             addClass: this.config.class
         }).create();
+
+        if(this.settings.thinScrollbar) {
+            this.panel.instance.classList.add('thin-scroller');
+        }
+
         this.panelEl = this.panel.instance;
   
         let arrow = this.arrowInstance = document.createElement('span');
@@ -866,7 +872,6 @@
         let parentUl = el.parentElement.parentElement.parentElement;
         let parentCheckbox = parentUl.parentElement.querySelector('.ui-select-children');
         let parentCheckboxDisplay = parentCheckbox.parentElement.querySelector('.checkbox-ui-checkmark');
-        console.log(parentUl);
         let numCheckboxes=0;
         let numChecked=0;
         parentUl.querySelectorAll('li input').forEach((input) => {
