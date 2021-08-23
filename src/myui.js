@@ -486,6 +486,22 @@
         return this;
     }
     destroy() {}
+    recalculatePosition() {
+        this.targetElement = {
+            positionX: this.targetEl.offsetLeft,
+            positionY: this.targetEl.offsetTop,
+            width: this.targetEl.offsetWidth,
+            height: this.targetEl.offsetHeight
+        };
+
+        this.instance.style.width = (this.settings.width || this.targetElement.width) +'px';
+        this.instance.style.maxHeight = (this.settings.height || 150) +'px';
+        this.instance.style.top = (this.targetElement.positionY + this.targetElement.height)+'px';
+        this.instance.style.left = this.targetElement.positionX+'px';
+        this.instance.style.zIndex = this.topZindex;
+  
+        return this;
+    }
   }
   
   class Autocomplete extends MyUI {
@@ -713,6 +729,7 @@
         this.topZindex = (this.findTopZindex())+1;
         this.inputEl = document.querySelector(this.settings.input);
         this.targetEl = this.defineTargetElement(this.settings.target);
+        this.inputEl.readOnly = true;
         this.create();
     }
     create() {
@@ -736,7 +753,7 @@
         this.arrowEl = this.inputEl.parentNode.insertBefore(arrow, this.inputEl.nextSibling);
   
         this.inputEl.parentNode.appendChild(this.panelEl);
-        this.inputEl.innerHTML = this.ArrowDown;
+        // this.inputEl.innerHTML = this.ArrowDown;
   
         if(this.settings.isDisabled) {
             this.disable();
@@ -771,32 +788,42 @@
         this.inputEl.classList.add('multiselect-ui-disabled');
         return this;
     }
+    show() {
+        // this.showSelectable();
+        this.panel.recalculatePosition();
+        this.panel.show();
+        this.arrowEl.innerHTML = this.ArrowUp;
+        this.settings.open();
+        
+    }
+    hide() {
+        this.panel.hide();
+        this.arrowEl.innerHTML = this.ArrowDown;
+        this.currentlySelected = (this.targetEl.value) ? this.targetEl.value.split(',') : [];
+        this.settings.handleSelectedItems(this.currentlySelected);
+        this.settings.close();
+    }
     toggleDisplay() {
         if(this.isDisabled) return false;
         if(this.panelEl.style.display === 'none') {
-            // this.showSelectable();
-            this.panel.show();
-            this.arrowEl.innerHTML = this.ArrowUp;
-            this.settings.open();
+            this.show();
         }
         else {
-            this.panel.hide();
-            this.arrowEl.innerHTML = this.ArrowDown;
-            this.currentlySelected = (this.targetEl.value) ? this.targetEl.value.split(',') : [];
-            this.settings.handleSelectedItems(this.currentlySelected);
-            this.settings.close();
+            this.hide();
         }
     }
     showSelected() {
         this.currentlySelected = (this.targetEl.value) ? this.targetEl.value.split(',') : [];
 
-        let firstSelected = (this.currentlySelected.length) ? this.panelEl.querySelector(`#${this.currentlySelected[0]}`) : null;
+        let firstSelected = (this.currentlySelected.length) ? this.panelEl.querySelector(`input[value="${this.currentlySelected[0]}"]`) : null;
         let selectedLabel = (firstSelected) ? firstSelected.parentElement.innerText : null;
 
         this.inputEl.value = 
             (this.currentlySelected.length === 1 && this.settings.displayOneSelected && selectedLabel)
                 ? selectedLabel
-                : this.currentlySelected.length + ' Selected';
+                : (this.currentlySelected.length) 
+                    ? this.currentlySelected.length + ' Selected'
+                    : '' ;
     }
     addItemListeners() {
         document.querySelectorAll('.multiselect-ui li input').forEach(input => {
@@ -870,9 +897,9 @@
       if(el.classList.contains('ui-select-children')) {
           return;
       }
-      this.currentlySelected = this.currentlySelected.filter(j => j !== el.id);
+      this.currentlySelected = this.currentlySelected.filter(j => j !== el.value);
       if(el.checked) {
-          this.currentlySelected.push(el.id);
+          this.currentlySelected.push(el.value);
       }
       this.targetEl.value = this.currentlySelected.join(',');
       this.showSelected();
@@ -948,7 +975,7 @@
             if(i.children) {
                 html += '<li class="parent">';
                 if(this.settings.parentSelectable) {
-                    html += `<label class="checkbox-ui-container"><input class="${(this.settings.parentSelectAll ? "ui-select-children" : "")}" type="checkbox" id="${i[idAlias]}" ${checked} /><span class="checkbox-ui-checkmark"></span><span class="ui-collapse-children">${i[nameAlias]}</span></label>`;
+                    html += `<label class="checkbox-ui-container"><input class="${(this.settings.parentSelectAll ? "ui-select-children" : "")}" type="checkbox" value="${i[idAlias]}" ${checked} /><span class="checkbox-ui-checkmark"></span><span class="ui-collapse-children">${i[nameAlias]}</span></label>`;
                 }
                 else {
                     html += i[nameAlias];
@@ -957,13 +984,13 @@
                 i.children.forEach(j => {
                     let checked = (this.currentlySelected.includes(j.id)) ? 'checked' : '';
                     if(this.currentlySelected.includes(j.id)) actuallySelected.push(j.id);
-                    html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ j[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ j[nameAlias] +'</label></li>';
+                    html += '<li><label class="checkbox-ui-container"><input type="checkbox" value="'+ j[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ j[nameAlias] +'</label></li>';
                 });
                 html += '</ul>';
                 html += '</li>';
             }
             else {
-                html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ i[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ i[nameAlias] +'</label></li>';
+                html += '<li><label class="checkbox-ui-container"><input type="checkbox" value="'+ i[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ i[nameAlias] +'</label></li>';
             }
         });
         html += '</ul>';
@@ -1691,4 +1718,22 @@
       return output;
     }
   }
-  
+
+// this needs some work... And set up for each of the above!
+HTMLInputElement.prototype.my_multiselect = function(args) {
+    if(typeof args == "object") {
+        if(!this.instance) {
+            this.instance = new Multiselect(args);
+        }
+        else {
+            for(let s in args) {
+                this.instance.settings[s] = args[s];
+            }
+            this.instance.hide();
+            this.instance.create();
+        }
+        return this.instance;
+    } else if(typeof args == "undefined") {
+        return this.instance;
+    }
+};
