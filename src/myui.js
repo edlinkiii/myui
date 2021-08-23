@@ -76,9 +76,9 @@
         });
         return top;
     }
-  }
+}
   
-  class Button extends MyUI {
+class Button extends MyUI {
     constructor(settings) {
         super();
         this.config = {
@@ -135,9 +135,9 @@
     
         return this;
     }
-  }
+}
   
-  class Overlay extends MyUI {
+class Overlay extends MyUI {
     constructor(settings) {
         super();
         this.settings = {
@@ -206,9 +206,9 @@
             this.destroy();
         }
     }
-  }
+}
   
-  class Blocker extends MyUI {
+class Blocker extends MyUI {
     constructor(settings) {
         super();
         this.settings = {
@@ -276,9 +276,9 @@
         this.overlay.style.display = 'none';
         return this;
     }
-  }
+}
   
-  class Modal extends MyUI {
+class Modal extends MyUI {
     constructor(settings) {
         super();
         this.config = {
@@ -438,9 +438,9 @@
   
         return this;
     }
-  }
+}
   
-  class Panel extends MyUI {
+class Panel extends MyUI {
     constructor(settings) {
         super();
         this.config = {
@@ -449,7 +449,7 @@
             display: 'block'
         }
         this.settings = {
-            attachToElement: null,
+            target: null,
             autoCreate: true
         }
         for(let s in settings) {
@@ -457,7 +457,7 @@
         }
         // this.settings.overlay.target = this.settings.target;
         this.topZindex = (this.findTopZindex())+1;
-        this.targetEl = this.defineTargetElement(this.settings.target);
+        this.targetEl = this.settings.targetEl || this.defineTargetElement(this.settings.target);
         if(this.settings.autoCreate) this.create();
     }
     create() {
@@ -502,9 +502,9 @@
   
         return this;
     }
-  }
+}
   
-  class Autocomplete extends MyUI {
+class Autocomplete extends MyUI {
     constructor(settings) {
         super();
         this.config = {
@@ -534,7 +534,6 @@
     create() {
         this.panel = new Panel({
             target: this.settings.input,
-            attachToElement: this.settings.input,
             width: this.settings.width,
             height: this.settings.height,
             addClass: this.config.class
@@ -691,9 +690,9 @@
   
         return this;
     }
-  }
+}
   
-  class Multiselect extends MyUI {
+class Multiselect extends MyUI {
     constructor(settings) {
         super();
         this.config = {
@@ -701,6 +700,7 @@
         }
         this.settings = {
             input: null,
+            inputEL: null,
             target: null,
             width: null,
             height: null,
@@ -727,15 +727,14 @@
             this.settings[s] = settings[s];
         }
         this.topZindex = (this.findTopZindex())+1;
-        this.inputEl = document.querySelector(this.settings.input);
+        this.inputEl = this.settings.inputEl || document.querySelector(this.settings.input);
         this.targetEl = this.defineTargetElement(this.settings.target);
         this.inputEl.readOnly = true;
         this.create();
     }
     create() {
         this.panel = new Panel({
-            target: this.settings.input,
-            attachToElement: this.settings.input,
+            target: this.settings.inputEl || this.settings.input,
             width: this.settings.width,
             height: this.settings.height,
             addClass: this.config.class
@@ -1006,9 +1005,9 @@
         this.settings.url = url;
         this.doQuery();
     }
-  }
+}
   
-  class Calendar extends MyUI {
+class Calendar extends MyUI {
     constructor(settings) {
         super();
         this.config = {
@@ -1062,7 +1061,6 @@
         // create panel (to display selectable items)
         this.panel = new Panel({
             target: this.settings.input,
-            attachToElement: this.settings.input,
             width: this.settings.width,
             height: this.settings.height,
             addClass: 'calendar-ui'
@@ -1258,9 +1256,9 @@
         }
         this.buildMonth();
     }
-  }
+}
   
-  class Clock extends MyUI {
+class Clock extends MyUI {
     constructor(settings) {
         super();
         this.config = {
@@ -1327,7 +1325,6 @@
   
         this.panel = new Panel({
             target: this.settings.input,
-            attachToElement: this.settings.input,
             width: this.settings.width,
             height: this.settings.height,
             addClass: 'clock-ui'
@@ -1479,9 +1476,9 @@
     }
     addEventListeners() {
     }
-  }
+}
   
-  class Shout extends MyUI {
+class Shout extends MyUI {
     constructor(settings) {
         super();
         this.config = {
@@ -1550,9 +1547,9 @@
         this.instance.remove();
     }
   
-  }
+}
   
-  class Table extends MyUI {
+class Table extends MyUI {
     constructor(settings) {
         super();
         this.config = {
@@ -1717,19 +1714,20 @@
       let output = input;
       return output;
     }
-  }
+}
 
 // this needs some work... And set up for each of the above!
 HTMLInputElement.prototype.my_multiselect = function(args) {
     if(typeof args == "object") {
+        args.inputEl = this;
         if(!this.instance) {
             this.instance = new Multiselect(args);
         }
         else {
+            this.instance.hide();
             for(let s in args) {
                 this.instance.settings[s] = args[s];
             }
-            this.instance.hide();
             this.instance.create();
         }
         return this.instance;
