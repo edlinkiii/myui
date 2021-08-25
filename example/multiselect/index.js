@@ -95,8 +95,8 @@ let reasons = {
     ]
 };
 
-let multi = new Multiselect({
-    input: '#multi_input',
+let multi = document.querySelector('#multi_input').my_multiselect({
+    // input: '#multi_input',
     target: '#multi_id',
     choices: reasons,
     // choiceDisplayProperty: 'DisplayName',

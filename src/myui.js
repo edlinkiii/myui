@@ -148,6 +148,7 @@ class Overlay extends MyUI {
             closeOnClick: false,
             closeOnEsc: false,
             target: 'body',
+            targetEl: null,
             open: function() {},
             close: function() {}
         }
@@ -156,7 +157,7 @@ class Overlay extends MyUI {
         }
         this.config.class = 'overlay-ui'
         this.topZindex = this.findTopZindex();
-        this.targetElement = this.defineTargetElement(this.settings.target);
+        this.targetElement = this.settings.targetEl || this.defineTargetElement(this.settings.target);
         this.create();
     }
   
@@ -170,7 +171,7 @@ class Overlay extends MyUI {
         this.instance.style.backgroundColor = 'rgba('+ this.instance.style.backgroundColor.substring(4,(this.instance.style.backgroundColor.length-1)) +', '+ this.settings.opacity +')';
         this.instance.style.zIndex = this.topZindex;
   
-        if(this.settings.target !== 'body') {
+        if(this.targetElement.tagName.toLowerCase() !== 'body') {
             this.instance.style.width = this.targetElement.offsetWidth + 'px';
             this.instance.style.height = this.targetElement.offsetHeight + 'px';
         }
@@ -289,6 +290,7 @@ class Modal extends MyUI {
         this.settings = {
             id: null,
             target: 'body',
+            targetEl: null,
             autoCreate: true,
             title: '',
             noTitle: false,
@@ -323,6 +325,7 @@ class Modal extends MyUI {
             this.settings[s] = settings[s];
         }
         this.settings.overlay.target = this.settings.target;
+        this.settings.overlay.targetEl = this.settings.targetEl;
         this.overlay = new Overlay(this.settings.overlay);
         this.topZindex = this.overlay.topZindex;
         this.topZindex+=1;
@@ -450,6 +453,7 @@ class Panel extends MyUI {
         }
         this.settings = {
             target: null,
+            targetEl: null,
             autoCreate: true
         }
         for(let s in settings) {
@@ -514,7 +518,9 @@ class Autocomplete extends MyUI {
             minimum: 2,
             matchRequired: true,
             input: null,
+            inputEl: null,
             target: null,
+            targetEl: null,
             width: null,
             height: null,
             url: null,
@@ -528,11 +534,12 @@ class Autocomplete extends MyUI {
             this.settings[s] = settings[s];
         }
         this.topZindex = (this.findTopZindex())+1;
-        this.targetEl = this.defineTargetElement(this.settings.target);
+        this.targetEl = this.settings.targetEl || this.defineTargetElement(this.settings.target);
         this.create();
     }
     create() {
         this.panel = new Panel({
+            targetEl: this.settings.inputEl,
             target: this.settings.input,
             width: this.settings.width,
             height: this.settings.height,
@@ -540,7 +547,7 @@ class Autocomplete extends MyUI {
         }).create();
         this.panelEl = this.panel.instance;
   
-        this.inputEl = document.querySelector(this.settings.input);
+        this.inputEl = this.settings.inputEl || document.querySelector(this.settings.input);
         this.inputEl.parentNode.appendChild(this.panelEl);
   
         // listener for auto-complete input
@@ -702,6 +709,7 @@ class Multiselect extends MyUI {
             input: null,
             inputEL: null,
             target: null,
+            targetEl: null,
             width: null,
             height: null,
             thinScrollbar: false,
@@ -728,13 +736,14 @@ class Multiselect extends MyUI {
         }
         this.topZindex = (this.findTopZindex())+1;
         this.inputEl = this.settings.inputEl || document.querySelector(this.settings.input);
-        this.targetEl = this.defineTargetElement(this.settings.target);
+        this.targetEl = this.settings.targetEl || this.defineTargetElement(this.settings.target);
         this.inputEl.readOnly = true;
         this.create();
     }
     create() {
         this.panel = new Panel({
-            target: this.settings.inputEl || this.settings.input,
+            targetEl: this.settings.inputEl,
+            target: this.settings.input,
             width: this.settings.width,
             height: this.settings.height,
             addClass: this.config.class
@@ -891,7 +900,7 @@ class Multiselect extends MyUI {
             });
         });
     }
-      listenerFunction__changeInput(el) {
+    listenerFunction__changeInput(el) {
       let label = el.parentElement;
       if(el.classList.contains('ui-select-children')) {
           return;
@@ -916,9 +925,11 @@ class Multiselect extends MyUI {
     evalChecked() {
         if(this.settings.parentSelectable && this.settings.parentSelectAll) {
             this.currentlySelected = (this.targetEl.value) ? this.targetEl.value.split(',') : [];
+            console.log(this.currentlySelected);
     
             this.currentlySelected.forEach((id) => {
-                this.evalParent(this.panelEl.querySelector(`#${id}`));
+                let el = this.panelEl.querySelector(`#${id}`);
+                this.evalParent(el);
             });
         }
     }
@@ -974,7 +985,7 @@ class Multiselect extends MyUI {
             if(i.children) {
                 html += '<li class="parent">';
                 if(this.settings.parentSelectable) {
-                    html += `<label class="checkbox-ui-container"><input class="${(this.settings.parentSelectAll ? "ui-select-children" : "")}" type="checkbox" value="${i[idAlias]}" ${checked} /><span class="checkbox-ui-checkmark"></span><span class="ui-collapse-children">${i[nameAlias]}</span></label>`;
+                    html += `<label class="checkbox-ui-container"><input class="${(this.settings.parentSelectAll ? "ui-select-children" : "")}" type="checkbox" id="${i[idAlias]}" ${checked} /><span class="checkbox-ui-checkmark"></span><span class="ui-collapse-children">${i[nameAlias]}</span></label>`;
                 }
                 else {
                     html += i[nameAlias];
@@ -983,13 +994,13 @@ class Multiselect extends MyUI {
                 i.children.forEach(j => {
                     let checked = (this.currentlySelected.includes(j.id)) ? 'checked' : '';
                     if(this.currentlySelected.includes(j.id)) actuallySelected.push(j.id);
-                    html += '<li><label class="checkbox-ui-container"><input type="checkbox" value="'+ j[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ j[nameAlias] +'</label></li>';
+                    html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ j[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ j[nameAlias] +'</label></li>';
                 });
                 html += '</ul>';
                 html += '</li>';
             }
             else {
-                html += '<li><label class="checkbox-ui-container"><input type="checkbox" value="'+ i[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ i[nameAlias] +'</label></li>';
+                html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ i[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ i[nameAlias] +'</label></li>';
             }
         });
         html += '</ul>';
@@ -1017,7 +1028,9 @@ class Calendar extends MyUI {
         }
         this.settings = {
             input: null,
+            inputEl: null,
             target: null,
+            targetEl: null,
             width: null,
             height: null,
             noFuture: true,
@@ -1034,11 +1047,11 @@ class Calendar extends MyUI {
         // this.settings.overlay.target = this.settings.target;
         this.topZindex = (this.findTopZindex())+1;
         this.input = this.settings.input;
-        this.targetEl = this.defineTargetElement(this.settings.target);
+        this.targetEl = this.settings.targetEl || this.defineTargetElement(this.settings.target);
         if(this.settings.autoCreate) this.create();
     }
     create() {
-        this.inputEl = document.querySelector(this.settings.input);
+        this.inputEl = this.settings.inputEl || document.querySelector(this.settings.input);
   
         let inputValue = this.inputEl.value;
         if(inputValue) {
@@ -1061,6 +1074,7 @@ class Calendar extends MyUI {
         // create panel (to display selectable items)
         this.panel = new Panel({
             target: this.settings.input,
+            targetEl: this.settings.inputEl,
             width: this.settings.width,
             height: this.settings.height,
             addClass: 'calendar-ui'
@@ -1268,7 +1282,9 @@ class Clock extends MyUI {
         }
         this.settings = {
             input: null,
+            inputEl: null,
             target: null,
+            targetEl: null,
             width: null,
             height: null,
             selectedTime: null,
@@ -1281,15 +1297,13 @@ class Clock extends MyUI {
         for(let s in settings) {
             this.settings[s] = settings[s];
         }
-        // this.settings.overlay.target = this.settings.target;
         this.topZindex = (this.findTopZindex())+1;
-        this.input = this.settings.input;
-        this.targetEl = this.defineTargetElement(this.settings.target);
+        this.targetEl = this.settings.targetEl || this.defineTargetElement(this.settings.target);
         if(this.settings.autoCreate) this.create();
     }
   
     create() {
-        this.inputEl = document.querySelector(this.settings.input);
+        this.inputEl = this.settings.inputEl || document.querySelector(this.settings.input);
         this.inputEl.setAttribute('readonly','readonly');
   
         let inputValue = this.inputEl.value;
@@ -1325,6 +1339,7 @@ class Clock extends MyUI {
   
         this.panel = new Panel({
             target: this.settings.input,
+            targetEl: this.settings.inputEl,
             width: this.settings.width,
             height: this.settings.height,
             addClass: 'clock-ui'
@@ -1561,6 +1576,7 @@ class Table extends MyUI {
             data: [],
             desc: [],
             target: 'body',
+            targetEl: null,
             id: 'my-table',
             width: '750px',
             height: '200px'
@@ -1568,7 +1584,7 @@ class Table extends MyUI {
         for(let s in settings) {
             this.settings[s] = settings[s];
         }
-        this.parent = document.querySelector(this.settings.target);
+        this.parent = this.settings.targetEl || document.querySelector(this.settings.target);
         this.create();
     }
     create() {
@@ -1722,6 +1738,101 @@ HTMLInputElement.prototype.my_multiselect = function(args) {
         args.inputEl = this;
         if(!this.instance) {
             this.instance = new Multiselect(args);
+        }
+        else {
+            this.instance.hide();
+            for(let s in args) {
+                this.instance.settings[s] = args[s];
+            }
+            this.instance.create();
+        }
+        return this.instance;
+    } else if(typeof args == "undefined") {
+        return this.instance;
+    }
+};
+
+HTMLInputElement.prototype.my_autocomplete = function(args) {
+    if(typeof args == "object") {
+        args.inputEl = this;
+        if(!this.instance) {
+            this.instance = new Autocomplete(args);
+        }
+        else {
+            this.instance.hide();
+            for(let s in args) {
+                this.instance.settings[s] = args[s];
+            }
+            this.instance.create();
+        }
+        return this.instance;
+    } else if(typeof args == "undefined") {
+        return this.instance;
+    }
+};
+
+HTMLInputElement.prototype.my_calendar = function(args) {
+    if(typeof args == "object") {
+        args.inputEl = this;
+        if(!this.instance) {
+            this.instance = new Calendar(args);
+        }
+        else {
+            this.instance.hide();
+            for(let s in args) {
+                this.instance.settings[s] = args[s];
+            }
+            this.instance.create();
+        }
+        return this.instance;
+    } else if(typeof args == "undefined") {
+        return this.instance;
+    }
+};
+
+HTMLInputElement.prototype.my_clock = function(args) {
+    if(typeof args == "object") {
+        args.inputEl = this;
+        if(!this.instance) {
+            this.instance = new Clock(args);
+        }
+        else {
+            this.instance.hide();
+            for(let s in args) {
+                this.instance.settings[s] = args[s];
+            }
+            this.instance.create();
+        }
+        return this.instance;
+    } else if(typeof args == "undefined") {
+        return this.instance;
+    }
+};
+
+HTMLElement.prototype.my_modal = function(args) {
+    if(typeof args == "object") {
+        args.inputEl = this;
+        if(!this.instance) {
+            this.instance = new Modal(args);
+        }
+        else {
+            this.instance.hide();
+            for(let s in args) {
+                this.instance.settings[s] = args[s];
+            }
+            this.instance.create();
+        }
+        return this.instance;
+    } else if(typeof args == "undefined") {
+        return this.instance;
+    }
+};
+
+HTMLElement.prototype.my_table = function(args) {
+    if(typeof args == "object") {
+        args.targetEl = this;
+        if(!this.instance) {
+            this.instance = new Table(args);
         }
         else {
             this.instance.hide();
