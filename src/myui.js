@@ -907,7 +907,7 @@ class Multiselect extends MyUI {
       }
       this.currentlySelected = this.currentlySelected.filter(j => j !== el.value);
       if(el.checked) {
-          this.currentlySelected.push(el.value);
+          this.currentlySelected.push(el.id);
       }
       this.targetEl.value = this.currentlySelected.join(',');
       this.showSelected();
