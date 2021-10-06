@@ -698,7 +698,7 @@ class Autocomplete extends MyUI {
         return this;
     }
 }
-  
+
 class Multiselect extends MyUI {
     constructor(settings) {
         super();
@@ -758,7 +758,7 @@ class Multiselect extends MyUI {
         let arrow = this.arrowInstance = document.createElement('span');
         arrow.classList.add('visibility-button');
         arrow.innerHTML = this.ArrowDown;
-        this.arrowEl = this.inputEl.parentNode.insertBefore(arrow, this.inputEl.nextSibling);
+        this.arrowEl = (this.arrowEl) ? this.arrowEl : this.inputEl.parentNode.insertBefore(arrow, this.inputEl.nextSibling);
   
         this.inputEl.parentNode.appendChild(this.panelEl);
         // this.inputEl.innerHTML = this.ArrowDown;
@@ -834,18 +834,18 @@ class Multiselect extends MyUI {
                     : '' ;
     }
     addItemListeners() {
-        document.querySelectorAll('.multiselect-ui li input').forEach(input => {
+        this.panelEl.querySelectorAll('li input').forEach(input => {
             input.addEventListener('change', e => this.listenerFunction__changeInput(e.target));
         });
   
         if(this.settings.parentSelectAll) {
-            document.querySelectorAll('.multiselect-ui li input.ui-select-children').forEach(input => {
+            this.panelEl.querySelectorAll('li input.ui-select-children').forEach(input => {
                 input.addEventListener('change', e => this.listenerFunction__changeParentInput(e.target));
             });
         }
 
         if(this.settings.collapsable) {
-            document.querySelectorAll('.multiselect-ui li .ui-collapse-children').forEach(input => {
+            this.panelEl.querySelectorAll('li .ui-collapse-children').forEach(input => {
                 input.addEventListener('click', e => {
                     e.preventDefault();
                     this.listenerFunction__toggleChildVisibility(e.target);
@@ -854,13 +854,13 @@ class Multiselect extends MyUI {
         }
 
         if(this.settings.selectAll) {
-            document.querySelector('#ui-btn-selectAll').addEventListener('click', e => this.listenerFunction__selectAll(e.target));
-            document.querySelector('#ui-btn-deselectAll').addEventListener('click', e => this.listenerFunction__deselectAll(e.target));
+            this.panelEl.querySelector('#ui-btn-selectAll').addEventListener('click', e => this.listenerFunction__selectAll(e.target));
+            this.panelEl.querySelector('#ui-btn-deselectAll').addEventListener('click', e => this.listenerFunction__deselectAll(e.target));
         }
 
         if(this.settings.collapseAll) {
-            document.querySelector('#ui-btn-collapseAll').addEventListener('click', e => this.listenerFunction__collapseAll(e.target));
-            document.querySelector('#ui-btn-expandAll').addEventListener('click', e => this.listenerFunction__expandAll(e.target));
+            this.panelEl.querySelector('#ui-btn-collapseAll').addEventListener('click', e => this.listenerFunction__collapseAll(e.target));
+            this.panelEl.querySelector('#ui-btn-expandAll').addEventListener('click', e => this.listenerFunction__expandAll(e.target));
         }
     }
     listenerFunction__toggleChildVisibility(el) {
@@ -907,7 +907,7 @@ class Multiselect extends MyUI {
       }
       this.currentlySelected = this.currentlySelected.filter(j => j !== el.value);
       if(el.checked) {
-          this.currentlySelected.push(el.id);
+          this.currentlySelected.push(el.value);
       }
       this.targetEl.value = this.currentlySelected.join(',');
       this.showSelected();
@@ -925,11 +925,9 @@ class Multiselect extends MyUI {
     evalChecked() {
         if(this.settings.parentSelectable && this.settings.parentSelectAll) {
             this.currentlySelected = (this.targetEl.value) ? this.targetEl.value.split(',') : [];
-            console.log(this.currentlySelected);
     
-            this.currentlySelected.forEach((id) => {
-                let el = this.panelEl.querySelector(`#${id}`);
-                this.evalParent(el);
+            this.currentlySelected.forEach((val) => {
+                this.evalParent(this.panelEl.querySelector(`input[value="${val}"]`));
             });
         }
     }
@@ -985,7 +983,7 @@ class Multiselect extends MyUI {
             if(i.children) {
                 html += '<li class="parent">';
                 if(this.settings.parentSelectable) {
-                    html += `<label class="checkbox-ui-container"><input class="${(this.settings.parentSelectAll ? "ui-select-children" : "")}" type="checkbox" id="${i[idAlias]}" ${checked} /><span class="checkbox-ui-checkmark"></span><span class="ui-collapse-children">${i[nameAlias]}</span></label>`;
+                    html += `<label class="checkbox-ui-container"><input class="${(this.settings.parentSelectAll ? "ui-select-children" : "")}" type="checkbox" value="${i[idAlias]}" ${checked} /><span class="checkbox-ui-checkmark"></span><span class="ui-collapse-children">${i[nameAlias]}</span></label>`;
                 }
                 else {
                     html += i[nameAlias];
@@ -994,13 +992,13 @@ class Multiselect extends MyUI {
                 i.children.forEach(j => {
                     let checked = (this.currentlySelected.includes(j.id)) ? 'checked' : '';
                     if(this.currentlySelected.includes(j.id)) actuallySelected.push(j.id);
-                    html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ j[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ j[nameAlias] +'</label></li>';
+                    html += '<li><label class="checkbox-ui-container"><input type="checkbox" value="'+ j[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ j[nameAlias] +'</label></li>';
                 });
                 html += '</ul>';
                 html += '</li>';
             }
             else {
-                html += '<li><label class="checkbox-ui-container"><input type="checkbox" id="'+ i[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ i[nameAlias] +'</label></li>';
+                html += '<li><label class="checkbox-ui-container"><input type="checkbox" value="'+ i[idAlias] +'" '+ checked +' /><span class="checkbox-ui-checkmark"></span>'+ i[nameAlias] +'</label></li>';
             }
         });
         html += '</ul>';
