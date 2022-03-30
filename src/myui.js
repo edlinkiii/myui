@@ -777,13 +777,20 @@ class Multiselect extends MyUI {
             this.storedOutput = this.buildList(this.settings.handleData(this.settings.choices));
         }
   
+        document.querySelector('body').addEventListener('click', e => this.hide());
+
+        this.panelEl.addEventListener('click', e => e.stopPropagation());
+
         this.inputEl.addEventListener('click', e => {
             this.toggleDisplay();
+            e.stopPropagation();
         });
+
         this.arrowEl.addEventListener('click', e => {
             this.toggleDisplay();
+            e.stopPropagation();
         });
-  
+
         return this;
     }
     enable() {
